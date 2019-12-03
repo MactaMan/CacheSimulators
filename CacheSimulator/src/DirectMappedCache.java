@@ -13,6 +13,10 @@ public class DirectMappedCache extends Cache {
 
 	public DirectMappedCache(int numEntries, int dataSize) {
 		super();
+		if(logBase2(numEntries) != (int)logBase2(numEntries))
+		{
+			throw new NumberFormatException("Number of rows for DirectMapped must be a power of 2");
+		}
 		this.dataSize = dataSize;
 		this.numEntries = numEntries;
 		s = new CacheEntrySize(this.dataSize, LEAST_USED_SIZE);
@@ -32,8 +36,10 @@ public class DirectMappedCache extends Cache {
 			e.add(new CacheEntry(s, 0, 0));
 			this.table.add(e);
 		}
-		System.out.println(
-				"Total bits used: " + ((1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries));
+		int totalBits = (1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries;
+		System.out.println("Total bits used: " + totalBits);
+		if(totalBits > this.MAX_SIZE)
+			System.out.println("\n\nWARNING: CACHE SIZE[" + totalBits + "] LARGER THAN MAX SIZE["+ this.MAX_SIZE + "]\n\n");
 	}
 
 	@Override
@@ -79,7 +85,6 @@ public class DirectMappedCache extends Cache {
 	 */
 	@Override
 	protected int getMissDelay() {
-		// TODO Auto-generated method stub
 		return 1 + 10 + dataSize / 8;
 	}
 

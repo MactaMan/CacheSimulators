@@ -27,8 +27,10 @@ public class FullyAssociativeCache extends Cache {
 			e.add(new CacheEntry(s, 0, 0, 0));
 			this.table.add(e);
 		}
-		System.out.println(
-				"Total bits used: " + ((1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries));
+		int totalBits = (1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries;
+		System.out.println("Total bits used: " + totalBits);
+		if(totalBits > this.MAX_SIZE)
+			System.out.println("\n\nWARNING: CACHE SIZE[" + totalBits + "] LARGER THAN MAX SIZE["+ this.MAX_SIZE + "]\n\n");
 
 	}
 
@@ -46,7 +48,10 @@ public class FullyAssociativeCache extends Cache {
 			// Should only be 1 entry for that row since it is FullyAssociative
 			if (row.get(0).getTag() == tag && row.get(0).getValidBit() == 1) {
 				System.out.println(" Hit");
-				setLRU(i);
+				if(row.get(0).getLeastUsed() != 0)
+				{
+					setLRU(i);
+				}
 				return 1;
 			}
 
@@ -85,11 +90,12 @@ public class FullyAssociativeCache extends Cache {
 	 */
 	private void setLRU(int index) {
 		for (int i = 0; i < table.size(); i++) {
+			CacheEntry entry = table.get(i).get(0);
 			if (index == i) {
-				table.get(i).get(0).setLeastUsed(0);
+				entry.setLeastUsed(0);
 			} else {
-				if (table.get(i).get(0).getValidBit() == 1)
-					table.get(i).get(0).incrementLeastUsed();
+				if (entry.getValidBit() == 1)
+					entry.incrementLeastUsed();
 			}
 		}
 	}
@@ -99,7 +105,6 @@ public class FullyAssociativeCache extends Cache {
 	 */
 	@Override
 	protected int getMissDelay() {
-		// TODO Auto-generated method stub
 		return 1 + 10 + dataSize / 8;
 	}
 

@@ -13,27 +13,33 @@ public class Simulator {
 					120, 124, 128, 144, 148
 				};
 		
+		int RealGroup[] = new int[]
+				{
+					4, 8, 12, 16, 20, 32, 36, 40, 44, 20, 32, 36, 
+					40, 44, 64, 68, 4, 8, 12, 92, 96, 100, 104, 108, 
+					112, 100, 112, 116, 120, 128, 140, 144
+				};
 		
 		
 		//rows then bits per block
 		Cache direct = new DirectMappedCache(4, 128);
-		
-		
-		readArrayOfAddresses(direct, TestGroup);
-		System.out.println("\n\n");
-		int delay = readArrayOfAddresses(direct, TestGroup);
-		direct.printCache();
-		System.out.println(delay);
-		
-		
-		//8/64 is 15 hits out of 28
-		//3/256 is 23 hits out of 28
-		//17/32 is 5 hits out of 28
+		simulateCache(direct, TestGroup);
+
 		Cache fullyAssociative = new FullyAssociativeCache(3, 256);
-		readArrayOfAddresses(fullyAssociative, TestGroup);
-		System.out.println("\n\n");
-		delay = readArrayOfAddresses(fullyAssociative, TestGroup);
-		fullyAssociative.printCache();
+		simulateCache(fullyAssociative, TestGroup);
+		
+		Cache setAssociative = new SetAssociativeCache(1, 256, 3);
+		simulateCache(setAssociative, TestGroup);
+	}
+	public static void simulateCache(Cache c, int[] address)
+	{
+		System.out.println("Initializing Cache with one runthrough of addresses . . .");
+		readArrayOfAddresses(c, address);
+		System.out.println("Finished. Starting real runthrough . . .\n\n");
+		double delay = readArrayOfAddresses(c, address);
+		double CPI = delay/address.length;
+		c.printCache();
+		System.out.println("Delay: " + delay + "\tCPI: " + CPI + "\n----------------------------------------------------------------\n\n");
 	}
 	
 	public static int readArrayOfAddresses(Cache c, int[] address)

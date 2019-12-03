@@ -5,9 +5,15 @@ public abstract class Cache {
 	protected final int ADDRESS_SIZE = 16; // bits
 	/*
 	 * Note that data is in 4 sequential bytes (32 bits) So can increase the data
-	 * size but must be in multiples of 4
+	 * size but must be powers of 2
+	 * 
+	 */
+	protected final int MIN_DATA_BLOCK_SIZE = 32; //bits
+	/*
+	 * Data is read at 1 byte at a time.
 	 */
 	protected final int DATA_READ_SIZE = 8; // bits
+	
 	/*
 	 * Holds entries in the cache. Ex
 	 * ________________________________________________ 
@@ -38,7 +44,8 @@ public abstract class Cache {
 	 * Prints a copy paste friendly representation of the cache.
 	 */
 	public void printCache() {
-		System.out.println("VB\tTag\tData");
+		System.out.println("State of the Cache: ");
+		System.out.println("VB\tTag\tData\tLRU");
 		for (int i = 0; i < table.size(); i++) {
 			ArrayList<CacheEntry> entries = table.get(i);
 			for (int j = 0; j < entries.size(); j++) {
