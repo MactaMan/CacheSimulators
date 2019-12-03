@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public abstract class Cache {
 	protected final int MAX_SIZE = 840; // bits
-	protected final int ADDRESS_SIZE = 16; // bits
+	protected final static int ADDRESS_SIZE = 16; // bits
 	/*
 	 * Note that data is in 4 sequential bytes (32 bits) So can increase the data
 	 * size but must be powers of 2
@@ -52,6 +52,26 @@ public abstract class Cache {
 				entries.get(j).printEntry();
 			}
 		}
+	}
+	
+	/**
+	 * Calculates what the size of a cache with the given data is.
+	 * @param numEntries
+	 * @param dataSize in bytes
+	 * @param waysAssociative must be 1 or larger
+	 * @return
+	 */
+	static public int getSizeWith(int numEntries, int dataSize, int waysAssociative)
+	{
+		int size = 0;
+		int offsetSize = (int) Math.ceil(logBase2(dataSize));
+		int indexSize = (int) Math.ceil(logBase2(numEntries));
+		int LRUSize = (int) Math.ceil(logBase2(waysAssociative));
+		int tagSize = ADDRESS_SIZE - offsetSize - indexSize;
+		size = (1 + tagSize + (dataSize*8) + LRUSize) * numEntries * waysAssociative;
+		
+		return size;
+		
 	}
 
 	/**

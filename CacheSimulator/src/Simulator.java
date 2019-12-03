@@ -19,6 +19,28 @@ public class Simulator {
 					40, 44, 64, 68, 4, 8, 12, 92, 96, 100, 104, 108, 
 					112, 100, 112, 116, 120, 128, 140, 144
 				};
+		//Simulate various sizes of direct caches
+		System.out.println("Sizes of Direct Mapped Caches");
+		printSize(1, 4, 1);
+		printSize(2, 4, 1);
+		printSize(4, 4, 1);
+		printSize(8, 4, 1);
+		printSize(16, 4, 1);// 16 is max size
+		System.out.println();
+		printSize(1, 8, 1);
+		printSize(2, 8, 1);
+		printSize(4, 8, 1);
+		printSize(8, 8, 1); // 8 is max size
+		System.out.println();
+		printSize(1, 16, 1);
+		printSize(2, 16, 1);
+		printSize(4, 16, 1); // 4 is max size
+		System.out.println();
+		printSize(1, 32, 1);
+		printSize(2, 32, 1);
+		System.out.println();
+		printSize(1, 64, 1);
+		System.out.println();
 		
 		
 		//rows then bits per block
@@ -53,6 +75,10 @@ public class Simulator {
 			delay += c.readAddress(address[i]);
 		}
 		return delay;
+	}
+	
+	public static void printSize(int rows, int dataSize, int waysAssociative) {
+		System.out.println("Entries: " + rows + "\tData Size: " + dataSize + "\tWays Associative: " + waysAssociative + "\tSize: " + Cache.getSizeWith(rows, dataSize, waysAssociative));
 	}
 
 }

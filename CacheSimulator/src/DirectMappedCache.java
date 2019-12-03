@@ -77,7 +77,7 @@ public class DirectMappedCache extends Cache {
 	 * @return
 	 */
 	public int calculateTagSize() {
-		return this.ADDRESS_SIZE - s.getLeastUsedSize() - offsetSize - indexSize;
+		return this.ADDRESS_SIZE - offsetSize - indexSize;
 	}
 
 	/**

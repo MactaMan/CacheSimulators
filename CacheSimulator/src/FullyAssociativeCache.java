@@ -17,9 +17,8 @@ public class FullyAssociativeCache extends Cache {
 		s = new CacheEntrySize(dataSize, (int) Math.ceil(logBase2(this.numEntries)));
 
 		offsetSize = (int) Math.ceil(logBase2(dataSize / DATA_READ_SIZE));
-		tagSize = this.ADDRESS_SIZE - offsetSize - INDEX_SIZE;
-		System.out
-				.println("OffsetSize: " + offsetSize + " -LRUSize: " + s.getLeastUsedSize() + " -TagSize: " + tagSize);
+		tagSize = Cache.ADDRESS_SIZE - offsetSize - INDEX_SIZE;
+		System.out.println("OffsetSize: " + offsetSize + " -LRUSize: " + s.getLeastUsedSize() + " -TagSize: " + tagSize);
 		// Populate the cache with invalid entries
 		for (int i = 0; i < numEntries; i++) {
 			ArrayList<CacheEntry> e = new ArrayList<CacheEntry>();
