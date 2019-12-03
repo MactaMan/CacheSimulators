@@ -30,6 +30,9 @@ public class Simulator {
 		
 		Cache setAssociative = new SetAssociativeCache(1, 256, 3);
 		simulateCache(setAssociative, TestGroup);
+		
+		
+		
 	}
 	public static void simulateCache(Cache c, int[] address)
 	{
@@ -42,7 +45,7 @@ public class Simulator {
 		System.out.println("Delay: " + delay + "\tCPI: " + CPI + "\n----------------------------------------------------------------\n\n");
 	}
 	
-	public static int readArrayOfAddresses(Cache c, int[] address)
+	private static int readArrayOfAddresses(Cache c, int[] address)
 	{
 		int delay = 0;
 		for(int i = 0; i < address.length; i++)
