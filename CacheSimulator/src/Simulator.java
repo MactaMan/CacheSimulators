@@ -43,6 +43,60 @@ public class Simulator {
 		System.out.println();
 		
 		
+		System.out.println("Sizes of Fully Associative Caches");
+		printSize(1, 4, 1);
+		printSize(1, 8, 1);
+		printSize(1, 16, 1);
+		printSize(1, 32, 1);
+		printSize(1, 64, 1);// 16 is max size
+		System.out.println();
+		printSize(1, 4, 2);
+		printSize(1, 8, 2);
+		printSize(1, 16, 2);
+		printSize(1, 32, 2); // 8 is max size
+		System.out.println();
+		printSize(1, 4, 3);
+		printSize(1, 8, 3);
+		printSize(1, 16, 3);
+		printSize(1, 32, 3); // 8 is max size
+		System.out.println();
+		printSize(1, 4, 4);
+		printSize(1, 8, 4);
+		printSize(1, 16, 4);
+		System.out.println();
+		printSize(1, 4, 5);
+		printSize(1, 8, 5);
+		printSize(1, 16, 5);
+		System.out.println();
+		printSize(1, 4, 6);
+		printSize(1, 8, 6);
+		System.out.println();
+		printSize(1, 4, 7);
+		printSize(1, 8, 7);
+		System.out.println();
+		printSize(1, 4, 8);
+		printSize(1, 8, 8);
+		System.out.println();
+		printSize(1, 4, 9);
+		printSize(1, 8, 9);
+		System.out.println();
+		printSize(1, 4, 10);
+		printSize(1, 8, 10);
+		System.out.println();
+		printSize(1, 4, 11);
+		System.out.println();
+		printSize(1, 4, 12);
+		System.out.println();
+		printSize(1, 4, 13);
+		System.out.println();
+		printSize(1, 4, 14);
+		System.out.println();
+		printSize(1, 4, 15);
+		System.out.println();
+		printSize(1, 4, 16);
+		System.out.println();
+		
+		
 		//rows then bits per block
 		Cache direct = new DirectMappedCache(4, 128);
 		simulateCache(direct, TestGroup);

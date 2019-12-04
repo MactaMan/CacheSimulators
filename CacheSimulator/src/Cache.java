@@ -56,6 +56,9 @@ public abstract class Cache {
 	
 	/**
 	 * Calculates what the size of a cache with the given data is.
+	 * For fully associative, set numEntries to 1
+	 * For Direct mapped set waysAssociative to 1
+	 * For set associative, num entries is the rows, waysAssociative is number of entries in every row
 	 * @param numEntries
 	 * @param dataSize in bytes
 	 * @param waysAssociative must be 1 or larger
