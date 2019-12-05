@@ -1,3 +1,8 @@
+/**
+ * Author: Carter Call
+ * Dec 2019
+ */
+
 import java.util.ArrayList;
 
 public class DirectMappedCache extends Cache {
@@ -20,15 +25,12 @@ public class DirectMappedCache extends Cache {
 		this.dataSize = dataSize;
 		this.numEntries = numEntries;
 		s = new CacheEntrySize(this.dataSize, LEAST_USED_SIZE);
-		// For 32 bits, offset = 0 bits
-		// 64 bits, 1 bit
-		// 96 bits, between 1 and 2 rounded to 2
-		// 128 bits, 2 bits
-		// So do dataSize bits/32
+
 		offsetSize = (int) Math.ceil(logBase2(dataSize / DATA_READ_SIZE));
 		indexSize = (int) Math.ceil(logBase2(numEntries));
 		tagSize = calculateTagSize();
 		System.out.println("OffsetSize: " + offsetSize + " -IndexSize: " + indexSize + " -TagSize: " + tagSize);
+		
 		// Populate the cache with invalid entries
 		for (int i = 0; i < numEntries; i++) {
 			ArrayList<CacheEntry> e = new ArrayList<CacheEntry>();
@@ -36,12 +38,16 @@ public class DirectMappedCache extends Cache {
 			e.add(new CacheEntry(s, 0, 0));
 			this.table.add(e);
 		}
-		int totalBits = (1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries;
+		
+		int totalBits = (1 + tagSize + s.getDataSizeBits() + s.getLeastUsedSize()) * this.numEntries;
 		System.out.println("Total bits used: " + totalBits);
 		if(totalBits > this.MAX_SIZE)
 			System.out.println("\n\nWARNING: CACHE SIZE[" + totalBits + "] LARGER THAN MAX SIZE["+ this.MAX_SIZE + "]\n\n");
 	}
 
+	/**
+	 * Reads the given address into the cache.
+	 */
 	@Override
 	public int readAddress(int address) {
 		// Offset is the first (offsetSize) bits
@@ -71,11 +77,6 @@ public class DirectMappedCache extends Cache {
 		}
 	}
 
-	/**
-	 * Tag size is
-	 * 
-	 * @return
-	 */
 	public int calculateTagSize() {
 		return this.ADDRESS_SIZE - offsetSize - indexSize;
 	}
@@ -85,7 +86,7 @@ public class DirectMappedCache extends Cache {
 	 */
 	@Override
 	protected int getMissDelay() {
-		return 1 + 10 + dataSize / 8;
+		return 1 + 10 + dataSize;
 	}
 
 }

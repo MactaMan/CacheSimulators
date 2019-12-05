@@ -1,8 +1,13 @@
+/**
+ * Author: Carter Call
+ * Dec 2019
+ */
+
 import java.util.ArrayList;
 
 public class FullyAssociativeCache extends Cache {
 
-	private int dataSize; // bits
+	private int dataSize; // bytes
 	private int numEntries;
 	private int offsetSize;
 	private final int INDEX_SIZE = 0;
@@ -17,8 +22,9 @@ public class FullyAssociativeCache extends Cache {
 		s = new CacheEntrySize(dataSize, (int) Math.ceil(logBase2(this.numEntries)));
 
 		offsetSize = (int) Math.ceil(logBase2(dataSize / DATA_READ_SIZE));
-		tagSize = Cache.ADDRESS_SIZE - offsetSize - INDEX_SIZE;
+		tagSize = this.ADDRESS_SIZE - offsetSize - INDEX_SIZE;
 		System.out.println("OffsetSize: " + offsetSize + " -LRUSize: " + s.getLeastUsedSize() + " -TagSize: " + tagSize);
+		
 		// Populate the cache with invalid entries
 		for (int i = 0; i < numEntries; i++) {
 			ArrayList<CacheEntry> e = new ArrayList<CacheEntry>();
@@ -26,13 +32,17 @@ public class FullyAssociativeCache extends Cache {
 			e.add(new CacheEntry(s, 0, 0, 0));
 			this.table.add(e);
 		}
-		int totalBits = (1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries;
+		
+		int totalBits = (1 + tagSize + s.getDataSizeBits() + s.getLeastUsedSize()) * this.numEntries;
 		System.out.println("Total bits used: " + totalBits);
 		if(totalBits > this.MAX_SIZE)
 			System.out.println("\n\nWARNING: CACHE SIZE[" + totalBits + "] LARGER THAN MAX SIZE["+ this.MAX_SIZE + "]\n\n");
 
 	}
 
+	/**
+	 * Reads the given address into the cache.
+	 */
 	@Override
 	public int readAddress(int address) {
 		// Offset is the first (offsetSize) bits
@@ -93,7 +103,7 @@ public class FullyAssociativeCache extends Cache {
 			if (index == i) {
 				entry.setLeastUsed(0);
 			} else {
-				if (entry.getValidBit() == 1)
+				if (entry.getValidBit() == 1 && entry.getLeastUsed() < this.numEntries - 1)
 					entry.incrementLeastUsed();
 			}
 		}
@@ -104,7 +114,7 @@ public class FullyAssociativeCache extends Cache {
 	 */
 	@Override
 	protected int getMissDelay() {
-		return 1 + 10 + dataSize / 8;
+		return 1 + 10 + dataSize;
 	}
 
 }

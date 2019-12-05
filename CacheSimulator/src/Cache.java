@@ -1,3 +1,8 @@
+/**
+ * Author: Carter Call
+ * Dec 2019
+ */
+
 import java.util.ArrayList;
 
 public abstract class Cache {
@@ -8,17 +13,16 @@ public abstract class Cache {
 	 * size but must be powers of 2
 	 * 
 	 */
-	protected final int MIN_DATA_BLOCK_SIZE = 32; //bits
+	protected final int MIN_DATA_BLOCK_SIZE = 4; //bits
 	/*
 	 * Data is read at 1 byte at a time.
 	 */
-	protected final int DATA_READ_SIZE = 8; // bits
+	protected final int DATA_READ_SIZE = 1; 
 	
 	/*
 	 * Holds entries in the cache. Ex
 	 * ________________________________________________ 
-	 * |Valid: 1, Tag: 20, Data:
-	 * Doesn't matter, (optional) Least recently used)
+	 * |Valid: 1, Tag: 20, Data:Doesn't matter, (optional) Least recently used)
 	 */
 	protected ArrayList<ArrayList<CacheEntry>> table;
 
@@ -30,14 +34,18 @@ public abstract class Cache {
 	}
 
 	/**
-	 * Reads the address and returns the cycles it took to read that address. Hit -
-	 * 1 Miss - 1 + 10 additional + 1*(number of bytes in each entry)
+	 * Reads the address and returns the cycles it took to read that address. 
+	 * Hit - 1 
+	 * Miss - 1 + 10 additional + 1*(number of bytes in entry)
 	 * 
 	 * @param address
 	 * @return
 	 */
 	public abstract int readAddress(int address);
 
+	/**
+	 * Returns the delay for a miss
+	 */
 	protected abstract int getMissDelay();
 
 	/**
@@ -50,6 +58,10 @@ public abstract class Cache {
 			ArrayList<CacheEntry> entries = table.get(i);
 			for (int j = 0; j < entries.size(); j++) {
 				entries.get(j).printEntry();
+			}
+			if(entries.size() > 1 && (i + 1) < table.size())
+			{
+				System.out.println("-------------------");
 			}
 		}
 	}

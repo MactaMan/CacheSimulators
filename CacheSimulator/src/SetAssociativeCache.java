@@ -1,13 +1,20 @@
+/**
+ * Author: Carter Call
+ * Dec 2019
+ */
+
 import java.util.ArrayList;
 
 public class SetAssociativeCache extends Cache {
 
-	private int dataSize; // bits
+	private int dataSize; // bytes
 	private int numEntries;
 	private int offsetSize;
 	private int wayAssociative;
 	private int indexSize;
 	private int tagSize;
+	
+	private CacheEntrySize s;
 
 	public SetAssociativeCache(int rows, int dataSize, int wayAssociative) {
 		super();
@@ -36,15 +43,17 @@ public class SetAssociativeCache extends Cache {
 			}
 			this.table.add(e);
 		}
-		int totalBits = (1 + tagSize + s.getDataSize() + s.getLeastUsedSize()) * this.numEntries * this.wayAssociative;
+		int totalBits = (1 + tagSize + s.getDataSizeBits() + s.getLeastUsedSize()) * this.numEntries * this.wayAssociative;
 		System.out.println("Total bits used: " + totalBits);
 		if(totalBits > this.MAX_SIZE)
 			System.out.println("\n\nWARNING: CACHE SIZE[" + totalBits + "] LARGER THAN MAX SIZE["+ this.MAX_SIZE + "]\n\n");
 
 	}
 
-	private CacheEntrySize s;
-
+	
+	/**
+	 * Reads an address into this cache.
+ 	 */
 	@Override
 	public int readAddress(int address) {
 		
@@ -111,23 +120,28 @@ public class SetAssociativeCache extends Cache {
 	 * @param index: The index of the entry in the row to set
 	 */
 	private void setLRUMini(int row,int index) {
-		ArrayList<CacheEntry> outerRow = table.get(row);
-		for(int i = 0; i < outerRow.size(); i++)
+		ArrayList<CacheEntry> tableRow = table.get(row);
+		for(int i = 0; i < tableRow.size(); i++)
 		{
-			CacheEntry entry = outerRow.get(i);
+			CacheEntry entry = tableRow.get(i);
 			if (index == i) {
 				entry.setLeastUsed(0);
 			} else {
-				if (entry.getValidBit() == 1)
+				if (entry.getValidBit() == 1 && entry.getLeastUsed() < this.wayAssociative - 1)
+				{
 					entry.incrementLeastUsed();
+				}
 			}
 		}
 	}
 	
+	/**
+	 * Returns the delay for a miss
+	 */
 	@Override
 	protected int getMissDelay() {
 		// TODO Auto-generated method stub
-		return 1 + 10 + dataSize/8;
+		return 1 + 10 + dataSize;
 	}
 
 }

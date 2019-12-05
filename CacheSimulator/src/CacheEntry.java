@@ -1,3 +1,7 @@
+/**
+ * Author: Carter Call
+ * Dec 2019
+ */
 
 public class CacheEntry {
 
@@ -24,7 +28,7 @@ public class CacheEntry {
 	 * @param leastUsed
 	 */
 	public CacheEntry(CacheEntrySize c, int validBit, int tag, int leastUsed) {
-		this.dataSize = c.getDataSize();
+		this.dataSize = c.getDataSizeBits();
 		this.leastUsedSize = c.getLeastUsedSize();
 
 		this.validBit = validBit;
@@ -41,7 +45,7 @@ public class CacheEntry {
 	 * @param leastUsed
 	 */
 	public CacheEntry(CacheEntrySize c, int validBit, int tag) {
-		this.dataSize = c.getDataSize();
+		this.dataSize = c.getDataSizeBits();
 		this.leastUsedSize = c.getLeastUsedSize();
 		if (leastUsedSize != 0)
 			throw new IllegalArgumentException(
@@ -72,12 +76,11 @@ public class CacheEntry {
 	}
 
 	/**
-	 * Returns the entry's size
-	 * 
+	 * Returns the entry's size in bits
 	 * @return
 	 */
 	public int getEntrySize() {
-		return VALID_BIT_SIZE + ADDRESS_SIZE + dataSize + leastUsedSize;
+		return VALID_BIT_SIZE + ADDRESS_SIZE + (dataSize*8) + leastUsedSize;
 	}
 
 	/**
@@ -100,7 +103,7 @@ public class CacheEntry {
  *
  */
 class CacheEntrySize {
-	private int dataSize; // bits
+	private int dataSize; // bytes
 	private int leastUsedSize; // bits
 
 	public CacheEntrySize(int dataSize, int leastUsedSize) {
@@ -108,8 +111,8 @@ class CacheEntrySize {
 		this.leastUsedSize = leastUsedSize;
 	}
 
-	public int getDataSize() {
-		return dataSize;
+	public int getDataSizeBits() {
+		return dataSize*8;
 	}
 
 	public int getLeastUsedSize() {
