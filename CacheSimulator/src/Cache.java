@@ -14,6 +14,7 @@ public abstract class Cache {
 	 * 
 	 */
 	protected final int MIN_DATA_BLOCK_SIZE = 4; //bits
+	
 	/*
 	 * Data is read at 1 byte at a time.
 	 */
